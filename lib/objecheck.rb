@@ -1,4 +1,4 @@
-require "objecheck/version"
+require 'objecheck/version'
 
 module Objecheck
   # Your code goes here...
