@@ -1,3 +1,5 @@
+# Validator checks a object with given schema and report errors
+#
 class Objecheck::Validator
   def initialize(type:)
     @type = type
