@@ -1,15 +1,26 @@
 # Validator checks a object with given schema and report errors
 #
 class Objecheck::Validator
-  def initialize(type:)
-    @type = type
+  def initialize(**schema)
+    @rules = schema.map do |rule_name, param|
+      Objecheck::Validator.rules[rule_name].new(param)
+    end
   end
 
   def validate(target)
-    errors = []
-    errors << "shoud be a #{@type}" if !target.is_a?(@type)
-    errors
+    @rules.flat_map do |rule|
+      rule.validate(target)
+    end
+  end
+
+  @rules = {}
+  class <<self
+    attr_reader :rules
+
+    def add_rule(name, rule_class)
+      @rules[name] = rule_class
+    end
   end
 end
 
-require 'objecheck/validator/hash_validator'
+require 'objecheck/validator/type_rule'
