@@ -11,3 +11,5 @@ class Objecheck::Validator
     errors
   end
 end
+
+require 'objecheck/validator/hash_validator'
