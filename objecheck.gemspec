@@ -1,10 +1,6 @@
-lib = File.expand_path('lib', __dir__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'objecheck/version'
-
 Gem::Specification.new do |spec|
   spec.name          = 'objecheck'
-  spec.version       = Objecheck::VERSION
+  spec.version       = '0.0.0'
   spec.authors       = ['autopp']
   spec.email         = ['autopp.inc@gmail.com']
 
