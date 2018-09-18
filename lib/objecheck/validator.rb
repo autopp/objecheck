@@ -18,3 +18,5 @@ class Objecheck::Validator
     end
   end
 end
+
+require 'objecheck/validator/collector'
