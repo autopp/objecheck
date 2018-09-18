@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['autopp']
   spec.email         = ['autopp.inc@gmail.com']
 
-  spec.summary       = 'schema and validatior for a Ruby object'
+  spec.summary       = 'schema and validator for a Ruby object'
   spec.description   = spec.summary
   spec.homepage      = 'https://github.com/autopp/objecheck'
   spec.license       = 'Apache-2.0'
