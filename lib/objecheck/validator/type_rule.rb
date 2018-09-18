@@ -8,6 +8,4 @@ class Objecheck::Validator::TypeRule
   def validate(target)
     target.is_a?(@type) ? [] : ["the type should be a #{@type}"]
   end
-
-  Objecheck::Validator.add_rule(:type, self)
 end

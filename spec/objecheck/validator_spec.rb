@@ -1,5 +1,5 @@
 describe Objecheck::Validator do
-  let(:validator) { described_class.new(**schema) }
+  let(:validator) { described_class.new(schema) }
 
   describe '#validate' do
     subject { validator.validate(target) }
