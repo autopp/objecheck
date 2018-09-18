@@ -1,0 +1,81 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.4.2-node-browsers
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: |
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      # Build gem
+      - run:
+          name: build gem
+          command: |
+            bundle exec rake build
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+      # run unit tests
+      - run:
+          name: run unit tests
+          command: |
+            bundle exec rspec --format documentation
+
+      # run rubocop
+      - run: bundle exec rubocop -D
+
+      # pass workspace to next job
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  publish:
+    docker:
+      # specify the version you desire here
+      - image: circleci/ruby:2.4.2-node-browsers
+    working_directory: ~/repo
+    steps:
+      - attach_workspace:
+          at: .
+      # configure to publish
+      - run:
+          name: configure
+          command: |
+            mkdir ~/.gem && echo -e ":rubygems_api_key: $RUBYGEMS_API_KEY" > ~/.gem/credentials && chmod 0600 /home/circleci/.gem/credentials
+      # publish to rubygems.org
+      - run:
+          name: publish
+          command: |
+            gem push pkg/objecheck-*.gem
+
+workflows:
+  version: 2
+  test-and-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - publish:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+){2}.*/
+            branches:
+              ignore: /.*/
