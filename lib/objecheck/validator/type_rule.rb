@@ -5,7 +5,7 @@ class Objecheck::Validator::TypeRule
     @type = type
   end
 
-  def validate(target)
-    target.is_a?(@type) ? [] : ["the type should be a #{@type}"]
+  def validate(target, collector)
+    collector.add_error("the type should be a #{@type} (got #{target.class})") if !target.is_a?(@type)
   end
 end

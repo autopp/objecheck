@@ -13,9 +13,13 @@ class Objecheck::Validator
   end
 
   def validate(target)
-    @rules.flat_map do |rule|
-      rule.validate(target)
+    collector = Collector.new(self)
+    collector.add_prefix_in('root') do
+      @rules.each do |rule|
+        rule.validate(target, collector)
+      end
     end
+    collector.errors
   end
 end
 
