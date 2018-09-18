@@ -1,5 +1,7 @@
 # Objecheck
 
+[![CircleCI](https://circleci.com/gh/autopp/objecheck/tree/master.svg?style=shield)](https://circleci.com/gh/autopp/objecheck/tree/master)
+
 Objecheck provides a simple and extensible object validator
 
 ## Installation
