@@ -1,5 +1,6 @@
 # Objecheck
 
+[![Gem Version](https://badge.fury.io/rb/objecheck.svg)](https://badge.fury.io/rb/objecheck)
 [![CircleCI](https://circleci.com/gh/autopp/objecheck/tree/master.svg?style=shield)](https://circleci.com/gh/autopp/objecheck/tree/master)
 
 Objecheck provides a simple and extensible object validator
