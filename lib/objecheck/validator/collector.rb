@@ -15,7 +15,7 @@ class Objecheck::Validator::Collector
   end
 
   def add_error(msg)
-    @errors << msg
+    @errors << "#{@prefix_stack.join('')}: #{msg}"
   end
 
   def errors

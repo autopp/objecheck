@@ -23,7 +23,26 @@ describe Objecheck::Validator::Collector do
       collector.add_error(first)
       collector.add_error(second)
 
-      expect(collector.errors).to eq([first, second])
+      expect(collector.errors).to eq([": #{first}", ": #{second}"])
+    end
+
+    context 'when called at block of #add_prefix_in' do
+      it 'records given message with prefix for later retrieval by #errors' do
+        first = 'something is wrong'
+        second = 'other is also wrong'
+
+        first_prefix = '[0]'
+        second_prefix = '.foo'
+        collector.add_prefix_in(first_prefix) do
+          collector.add_error(first)
+
+          collector.add_prefix_in(second_prefix) do
+            collector.add_error(second)
+          end
+        end
+
+        expect(collector.errors).to eq(["#{first_prefix}: #{first}", "#{first_prefix}#{second_prefix}: #{second}"])
+      end
     end
   end
 end
