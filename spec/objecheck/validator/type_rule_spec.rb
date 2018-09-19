@@ -1,5 +1,5 @@
 describe Objecheck::Validator::TypeRule do
-  let(:rule) { described_class.new(type) }
+  let(:rule) { described_class.new(instance_double(Objecheck::Validator), type) }
   let(:type) { Hash }
 
   describe '#validate' do

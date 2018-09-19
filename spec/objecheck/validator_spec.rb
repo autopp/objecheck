@@ -20,4 +20,14 @@ describe Objecheck::Validator do
       end
     end
   end
+
+  describe '#compile_schema' do
+    subject { validator.compile_schema({ type: Array }) }
+
+    let(:schema) { { type: Hash } }
+
+    it 'returns rules' do
+      expect(subject).to match([a_kind_of(Objecheck::Validator::TypeRule)])
+    end
+  end
 end
