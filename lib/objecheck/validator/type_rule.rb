@@ -17,7 +17,7 @@
 # TypeRule validates type of a target
 #
 class Objecheck::Validator::TypeRule
-  def initialize(type)
+  def initialize(_validator, type)
     @type = type
   end
 

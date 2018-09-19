@@ -39,7 +39,7 @@ class Objecheck::Validator
 
   def compile_schema(schema)
     schema.map do |rule_name, param|
-      @rule_map[rule_name].new(param)
+      @rule_map[rule_name].new(self, param)
     end
   end
 end
