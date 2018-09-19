@@ -22,10 +22,9 @@ class Objecheck::Validator
     type: TypeRule
   }.freeze
 
-  def initialize(schema, rules = DEFAULT_RULES)
-    @rules = schema.map do |rule_name, param|
-      rules[rule_name].new(param)
-    end
+  def initialize(schema, rule_map = DEFAULT_RULES)
+    @rule_map = rule_map
+    @rules = compile_schema(schema)
   end
 
   def validate(target)
@@ -36,6 +35,12 @@ class Objecheck::Validator
       end
     end
     collector.errors
+  end
+
+  def compile_schema(schema)
+    schema.map do |rule_name, param|
+      @rule_map[rule_name].new(param)
+    end
   end
 end
 
