@@ -30,9 +30,7 @@ class Objecheck::Validator
   def validate(target)
     collector = Collector.new(self)
     collector.add_prefix_in('root') do
-      @rules.each do |rule|
-        rule.validate(target, collector)
-      end
+      collector.validate(target, @rules)
     end
     collector.errors
   end

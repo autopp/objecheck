@@ -34,6 +34,12 @@ class Objecheck::Validator::Collector
     @errors << "#{@prefix_stack.join('')}: #{msg}"
   end
 
+  def validate(target, rules)
+    rules.each do |rule|
+      rule.validate(target, self)
+    end
+  end
+
   def errors
     @errors.dup
   end
