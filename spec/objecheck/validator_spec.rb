@@ -27,7 +27,7 @@ describe Objecheck::Validator do
     let(:schema) { { type: Hash } }
 
     it 'returns rules' do
-      expect(subject).to match([a_kind_of(Objecheck::Validator::TypeRule)])
+      expect(subject).to match({ type: a_kind_of(Objecheck::Validator::TypeRule) })
     end
   end
 end

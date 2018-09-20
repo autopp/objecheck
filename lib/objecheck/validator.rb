@@ -36,8 +36,8 @@ class Objecheck::Validator
   end
 
   def compile_schema(schema)
-    schema.map do |rule_name, param|
-      @rule_map[rule_name].new(self, param)
+    schema.each_with_object({}) do |(rule_name, param), rules|
+      rules[rule_name] = @rule_map[rule_name].new(self, param)
     end
   end
 end

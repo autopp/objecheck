@@ -35,7 +35,7 @@ class Objecheck::Validator::Collector
   end
 
   def validate(target, rules)
-    rules.each do |rule|
+    rules.each do |_name, rule|
       rule.validate(target, self)
     end
   end
