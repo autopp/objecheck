@@ -19,6 +19,7 @@
 class Objecheck::Validator::Collector
   def initialize(validator)
     @validator = validator
+    @current_rule_name = nil
     @prefix_stack = []
     @errors = []
   end
@@ -31,13 +32,17 @@ class Objecheck::Validator::Collector
   end
 
   def add_error(msg)
-    @errors << "#{@prefix_stack.join('')}: #{msg}"
+    @errors << "#{@prefix_stack.join('')}: #{@current_rule_name}: #{msg}"
   end
 
   def validate(target, rules)
-    rules.each do |rule|
+    prev_rule_name = @current_rule_name
+    rules.each do |name, rule|
+      @current_rule_name = name
       rule.validate(target, self)
     end
+  ensure
+    @current_rule_name = prev_rule_name
   end
 
   def errors

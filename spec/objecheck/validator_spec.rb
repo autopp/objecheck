@@ -16,7 +16,7 @@ describe Objecheck::Validator do
       context 'and when target is a Array' do
         let(:target) { [] }
 
-        it { is_expected.to eq(['root: the type should be a Hash (got Array)']) }
+        it { is_expected.to eq(['root: type: should be a Hash (got Array)']) }
       end
     end
   end
@@ -27,7 +27,7 @@ describe Objecheck::Validator do
     let(:schema) { { type: Hash } }
 
     it 'returns rules' do
-      expect(subject).to match([a_kind_of(Objecheck::Validator::TypeRule)])
+      expect(subject).to match({ type: a_kind_of(Objecheck::Validator::TypeRule) })
     end
   end
 end

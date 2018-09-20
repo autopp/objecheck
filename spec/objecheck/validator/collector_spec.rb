@@ -23,7 +23,7 @@ describe Objecheck::Validator::Collector do
       collector.add_error(first)
       collector.add_error(second)
 
-      expect(collector.errors).to eq([": #{first}", ": #{second}"])
+      expect(collector.errors).to eq([": : #{first}", ": : #{second}"])
     end
 
     context 'when called at block of #add_prefix_in' do
@@ -41,7 +41,7 @@ describe Objecheck::Validator::Collector do
           end
         end
 
-        expect(collector.errors).to eq(["#{first_prefix}: #{first}", "#{first_prefix}#{second_prefix}: #{second}"])
+        expect(collector.errors).to eq(["#{first_prefix}: : #{first}", "#{first_prefix}#{second_prefix}: : #{second}"])
       end
     end
   end

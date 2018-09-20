@@ -19,7 +19,7 @@ describe Objecheck::Validator::TypeRule do
       let(:target) { [] }
 
       it 'add error to collector' do
-        expect(collector).to receive(:add_error).with('the type should be a Hash (got Array)')
+        expect(collector).to receive(:add_error).with('should be a Hash (got Array)')
         subject
       end
     end
