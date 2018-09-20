@@ -23,7 +23,7 @@ describe Objecheck::Validator::EachKeyRule do
         end
       end
 
-      context 'and all elements in target are satisfy the schema' do
+      context 'and all keys in target are satisfy the schema' do
         let(:target) { { a: 1, b: 2, c: 3 } }
 
         it 'dose not add error to collector' do
@@ -32,7 +32,7 @@ describe Objecheck::Validator::EachKeyRule do
         end
       end
 
-      context 'and some elements in target are not satisfy the schema' do
+      context 'and some keys in target are not satisfy the schema' do
         let(:target) { { 'a' => 1, b: 2, 'c' => 3 } }
 
         it 'dose not add error to collector' do
