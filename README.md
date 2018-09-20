@@ -75,6 +75,19 @@ Example schema:
 }
 ```
 
+### `each_value`
+
+`each_value` checks values of the object by using `each_pair`.
+
+Example schema:
+```ruby
+{
+  each_value: {
+    type: Integer
+  }
+}
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/autopp/objecheck.
