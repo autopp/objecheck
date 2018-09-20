@@ -16,7 +16,7 @@ describe Objecheck::Validator do
       context 'and when target is a Array' do
         let(:target) { [] }
 
-        it { is_expected.to eq(['root: the type should be a Hash (got Array)']) }
+        it { is_expected.to eq(['root: type: should be a Hash (got Array)']) }
       end
     end
   end
