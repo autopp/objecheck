@@ -19,9 +19,11 @@
 class Objecheck::Validator
   require 'objecheck/validator/type_rule'
   require 'objecheck/validator/each_rule'
+  require 'objecheck/validator/each_key_rule'
   DEFAULT_RULES = {
     type: TypeRule,
-    each: EachRule
+    each: EachRule,
+    each_key: EachKeyRule
   }.freeze
 
   def initialize(schema, rule_map = DEFAULT_RULES)
