@@ -34,6 +34,32 @@ validator = Objecheck::Validator.new({
 # Validator#validate checks the given object and returns error messages as a array
 p validator.validate({ a: 1, b: 2 }) # => []
 p validator.validate([1, 2]) # => ["root: the type should be a Hash (got Array)"]
+
+# Validate type of keys and values
+validator = Objecheck::Validator.new({
+  each_key: { type: Symbol }
+  each_value: { type: Integer }
+})
+
+p validator.validate({ a: 1, b: 2 }) # => []
+
+# Validate array that contains specific key/value
+validator = Objecheck::Validator.new({
+  type: Array,
+  each: {
+    key_value: {
+      name: {
+        value: { type: String }
+      },
+      age: {
+        required: false,
+        value: { type: Integer }
+      }
+    }
+  }
+})
+
+p validator.validate([{ name: 'Jhon', age: 20 }, { name: 'Tom' }]) # => []
 ```
 
 ## Builtin rules
@@ -84,6 +110,25 @@ Example schema:
 {
   each_value: {
     type: Integer
+  }
+}
+```
+
+### `key_value`
+
+`key_value` checks key/values of the object by using `each_pair`.
+
+Example schema:
+```ruby
+{
+  key_value: {
+    name: {
+      value: { type: String }
+    },
+    age: {
+      required: false # Default is true
+      value: { type: Integer }
+    }
   }
 }
 ```
