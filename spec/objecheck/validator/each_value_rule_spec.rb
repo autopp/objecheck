@@ -35,7 +35,7 @@ describe Objecheck::Validator::EachValueRule do
       context 'and some values in target are not satisfy the schema' do
         let(:target) { { a: '1', b: 2, c: '3' } }
 
-        it 'dose not add error to collector' do
+        it 'add errors to collector' do
           expect(collector).to receive(:add_error).twice
           subject
         end
