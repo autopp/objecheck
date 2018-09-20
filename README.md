@@ -88,6 +88,25 @@ Example schema:
 }
 ```
 
+### `key_value`
+
+`key_value` checks key/values of the object by using `each_pair`.
+
+Example schema:
+```ruby
+{
+  key_value: {
+    name: {
+      value: { type: String }
+    },
+    age: {
+      required: false # Default is true
+      value: { type: Integer }
+    }
+  }
+}
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/autopp/objecheck.
