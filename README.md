@@ -64,7 +64,7 @@ Example schema:
 
 ### `each_key`
 
-`each_key` checks keys of the object by using `each_keya`.
+`each_key` checks keys of the object by using `each_key`.
 
 Example schema:
 ```ruby
