@@ -49,6 +49,20 @@ Example schema:
 }
 ```
 
+### `each`
+
+`each` checks elements of the object by using `each`.
+
+Example schema:
+```ruby
+{
+  each: {
+    type: Integer
+  }
+}
+```
+
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/autopp/objecheck.
