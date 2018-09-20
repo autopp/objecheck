@@ -62,6 +62,18 @@ Example schema:
 }
 ```
 
+### `each_key`
+
+`each_key` checks keys of the object by using `each_keya`.
+
+Example schema:
+```ruby
+{
+  each_key: {
+    type: Symbol
+  }
+}
+```
 
 ## Contributing
 
