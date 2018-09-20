@@ -28,7 +28,7 @@ class Objecheck::Validator::EachKeyRule
     end
 
     target.each_key do |key|
-      collector.add_prefix_in("[#{key.inspect}]") do
+      collector.add_prefix_in(".key(#{key.inspect})") do
         collector.validate(key, @key_rules)
       end
     end
