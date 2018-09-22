@@ -75,6 +75,13 @@ Example schema:
 }
 ```
 
+When you want to check that value is a boolean (`true` or `false`), use `:bool`.
+```ruby
+{
+  type: :bool
+}
+```
+
 ### `each`
 
 `each` checks elements of the object by using `each`.

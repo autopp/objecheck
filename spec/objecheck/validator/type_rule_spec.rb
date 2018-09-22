@@ -23,5 +23,36 @@ describe Objecheck::Validator::TypeRule do
         subject
       end
     end
+
+    context 'when the given type is :bool' do
+      let(:type) { :bool }
+
+      context 'when target is true' do
+        let(:target) { true }
+
+        it 'dose not add error to collector' do
+          expect(collector).not_to receive(:add_error)
+          subject
+        end
+      end
+
+      context 'when target is false' do
+        let(:target) { false }
+
+        it 'dose not add error to collector' do
+          expect(collector).not_to receive(:add_error)
+          subject
+        end
+      end
+
+      context 'when target is not boolean' do
+        let(:target) { 42 }
+
+        it 'add error to collector' do
+          expect(collector).to receive(:add_error).with('should be a bool (got Integer)')
+          subject
+        end
+      end
+    end
   end
 end

@@ -22,6 +22,10 @@ class Objecheck::Validator::TypeRule
   end
 
   def validate(target, collector)
-    collector.add_error("should be a #{@type} (got #{target.class})") if !target.is_a?(@type)
+    if @type == :bool
+      collector.add_error("should be a bool (got #{target.class})") if target != true && target != false
+    elsif !target.is_a?(@type)
+      collector.add_error("should be a #{@type} (got #{target.class})")
+    end
   end
 end
