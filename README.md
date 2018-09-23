@@ -140,6 +140,17 @@ Example schema:
 }
 ```
 
+### `eq`
+
+`eq` checks equality of values.
+
+Example schema:
+```ruby
+{
+  eq: 'foo'
+}
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/autopp/objecheck.
