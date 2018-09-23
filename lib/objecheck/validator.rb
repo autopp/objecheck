@@ -22,6 +22,7 @@ class Objecheck::Validator
   require 'objecheck/validator/each_key_rule'
   require 'objecheck/validator/each_value_rule'
   require 'objecheck/validator/key_value_rule'
+  require 'objecheck/validator/eq_rule'
   DEFAULT_RULES = {
     type: TypeRule,
     each: EachRule,
