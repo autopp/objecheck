@@ -44,5 +44,33 @@ describe Objecheck::Validator::Collector do
         expect(collector.errors).to eq(["#{first_prefix}: : #{first}", "#{first_prefix}#{second_prefix}: : #{second}"])
       end
     end
+
+    context 'when transaction is created by #transaction' do
+      before do
+        @t = collector.transaction
+      end
+
+      it 'records given message but not shown by #errors' do
+        collector.add_error('something is wrong')
+        expect(collector.errors).to be_empty
+      end
+
+      context 'and transaction is commited' do
+        it 'records given message and shown in #errors' do
+          msg = 'something is wrong'
+          collector.add_error(msg)
+          collector.commit(@t)
+          expect(collector.errors).to eq([": : #{msg}"])
+        end
+      end
+
+      context 'and transaction is rollbacked' do
+        it 'records given message and shown in #errors' do
+          collector.add_error('something is wrong')
+          collector.rollback(@t)
+          expect(collector.errors).to be_empty
+        end
+      end
+    end
   end
 end

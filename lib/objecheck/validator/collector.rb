@@ -22,6 +22,7 @@ class Objecheck::Validator::Collector
     @current_rule_name = nil
     @prefix_stack = []
     @errors = []
+    @transaction_stack = []
   end
 
   def add_prefix_in(prefix)
@@ -32,7 +33,12 @@ class Objecheck::Validator::Collector
   end
 
   def add_error(msg)
-    @errors << "#{@prefix_stack.join('')}: #{@current_rule_name}: #{msg}"
+    msg = "#{@prefix_stack.join('')}: #{@current_rule_name}: #{msg}"
+    if (_t, errors = @transaction_stack.last)
+      errors << msg
+    else
+      @errors << msg
+    end
   end
 
   def validate(target, rules)
@@ -47,5 +53,35 @@ class Objecheck::Validator::Collector
 
   def errors
     @errors.dup
+  end
+
+  def transaction
+    t = Transaction.new(self)
+    @transaction_stack << [t, []]
+    t
+  end
+
+  def commit(t)
+    errors_in_t = @transaction_stack.pop[1]
+    parrent_errors = @transaction_stack.empty? ? @errors : @transaction_stack.last[1]
+    parrent_errors.concat(errors_in_t)
+  end
+
+  def rollback(t)
+    @transaction_stack.pop
+  end
+
+  # Transaction is created by Collector#transaction and represents unit of transaction
+  #
+  class Transaction
+    def initialize(collector)
+      @collector = collector
+      @errors = []
+    end
+
+    def add_error(msg)
+      @errors << msg
+      self
+    end
   end
 end
