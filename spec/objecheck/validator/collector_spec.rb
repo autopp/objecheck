@@ -54,23 +54,26 @@ describe Objecheck::Validator::Collector do
         collector.add_error('something is wrong')
         expect(collector.errors).to be_empty
       end
+    end
+  end
 
-      context 'and transaction is commited' do
-        it 'records given message and shown in #errors' do
-          msg = 'something is wrong'
-          collector.add_error(msg)
-          collector.commit(@t)
-          expect(collector.errors).to eq([": : #{msg}"])
-        end
-      end
+  describe '#commit' do
+    it 'promotes errors in transaction' do
+      t = collector.transaction
+      msg = 'something is wrong'
+      collector.add_error(msg)
+      collector.commit(t)
+      expect(collector.errors).to eq([": : #{msg}"])
+    end
+  end
 
-      context 'and transaction is rollbacked' do
-        it 'records given message and shown in #errors' do
-          collector.add_error('something is wrong')
-          collector.rollback(@t)
-          expect(collector.errors).to be_empty
-        end
-      end
+  describe '#rollback' do
+    it 'discards errors in transaction' do
+      t = collector.transaction
+      msg = 'something is wrong'
+      collector.add_error(msg)
+      collector.rollback(t)
+      expect(collector.errors).to be_empty
     end
   end
 end
