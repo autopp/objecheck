@@ -1,5 +1,10 @@
 # Change Log
 
+## v0.3.0
+
+- Add `EqRule` as `eq`
+- Enable `TypeRule` to check boolean (`true` or `false`)
+
 ## v0.2.0
 
 - Change signature of rule's `#validate` to enable nested schema
