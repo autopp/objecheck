@@ -62,7 +62,10 @@ class Objecheck::Validator::Collector
   end
 
   def commit(t)
-    errors_in_t = @transaction_stack.pop[1]
+    current_t, errors_in_t = @transaction_stack.last
+    raise "invalid transaction #{t} (current: #{current_t})" if !t.equal?(current_t)
+
+    @transaction_stack.pop
     parrent_errors = @transaction_stack.empty? ? @errors : @transaction_stack.last[1]
     parrent_errors.concat(errors_in_t)
   end

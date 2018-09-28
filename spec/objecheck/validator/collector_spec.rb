@@ -65,6 +65,30 @@ describe Objecheck::Validator::Collector do
       collector.commit(t)
       expect(collector.errors).to eq([": : #{msg}"])
     end
+
+    context 'when nested transaction is created' do
+      context 'and order of commit is correct' do
+        it 'promotes errors in transaction' do
+          t1 = collector.transaction
+          t2 = collector.transaction
+          msg = 'something is wrong'
+          collector.add_error(msg)
+          collector.commit(t2)
+          collector.commit(t1)
+          expect(collector.errors).to eq([": : #{msg}"])
+        end
+      end
+
+      context 'and order of commit is wrong' do
+        it 'promotes errors in transaction' do
+          t1 = collector.transaction
+          _t2 = collector.transaction
+          msg = 'something is wrong'
+          collector.add_error(msg)
+          expect { collector.commit(t1) }.to raise_error(StandardError)
+        end
+      end
+    end
   end
 
   describe '#rollback' do
