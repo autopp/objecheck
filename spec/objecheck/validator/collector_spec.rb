@@ -80,7 +80,7 @@ describe Objecheck::Validator::Collector do
       end
 
       context 'and order of commit is wrong' do
-        it 'promotes errors in transaction' do
+        it 'raises error' do
           t1 = collector.transaction
           _t2 = collector.transaction
           msg = 'something is wrong'
