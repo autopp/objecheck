@@ -66,6 +66,12 @@ describe Objecheck::Validator::Collector do
       expect(collector.errors).to eq([": : #{msg}"])
     end
 
+    context 'when transaction is not created' do
+      it 'raises error' do
+        expect { collector.commit(nil) }.to raise_error(Objecheck::Error)
+      end
+    end
+
     context 'when nested transaction is created' do
       context 'and order of commit is correct' do
         it 'promotes errors in transaction' do

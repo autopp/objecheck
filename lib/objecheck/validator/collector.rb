@@ -62,6 +62,8 @@ class Objecheck::Validator::Collector
   end
 
   def commit(t)
+    raise Objecheck::Error, 'no transaction created' if @transaction_stack.empty?
+
     current_t, errors_in_t = @transaction_stack.last
     raise Objecheck::Error, "invalid transaction #{t} (current: #{current_t})" if !t.equal?(current_t)
 
