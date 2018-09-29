@@ -56,7 +56,7 @@ class Objecheck::Validator::Collector
   end
 
   def transaction
-    t = Transaction.new(self)
+    t = Object.new
     @transaction_stack << [t, []]
     t
   end
@@ -81,19 +81,5 @@ class Objecheck::Validator::Collector
 
     @transaction_stack.pop
     errors_in_t
-  end
-
-  # Transaction is created by Collector#transaction and represents unit of transaction
-  #
-  class Transaction
-    def initialize(collector)
-      @collector = collector
-      @errors = []
-    end
-
-    def add_error(msg)
-      @errors << msg
-      self
-    end
   end
 end
