@@ -63,7 +63,7 @@ class Objecheck::Validator::Collector
 
   def commit(t)
     current_t, errors_in_t = @transaction_stack.last
-    raise "invalid transaction #{t} (current: #{current_t})" if !t.equal?(current_t)
+    raise Objecheck::Error, "invalid transaction #{t} (current: #{current_t})" if !t.equal?(current_t)
 
     @transaction_stack.pop
     parrent_errors = @transaction_stack.empty? ? @errors : @transaction_stack.last[1]

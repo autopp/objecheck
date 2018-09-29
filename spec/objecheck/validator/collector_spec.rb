@@ -85,7 +85,7 @@ describe Objecheck::Validator::Collector do
           _t2 = collector.transaction
           msg = 'something is wrong'
           collector.add_error(msg)
-          expect { collector.commit(t1) }.to raise_error(StandardError)
+          expect { collector.commit(t1) }.to raise_error(Objecheck::Error)
         end
       end
     end
