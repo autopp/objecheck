@@ -47,7 +47,7 @@ describe Objecheck::Validator::Collector do
 
     context 'when transaction is created by #transaction' do
       before do
-        @t = collector.transaction
+        collector.transaction
       end
 
       it 'records given message but not shown by #errors' do
