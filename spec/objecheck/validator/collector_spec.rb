@@ -127,5 +127,11 @@ describe Objecheck::Validator::Collector do
         end
       end
     end
+
+    context 'when transaction is not created' do
+      it 'raises error' do
+        expect { collector.rollback(nil) }.to raise_error(Objecheck::Error)
+      end
+    end
   end
 end

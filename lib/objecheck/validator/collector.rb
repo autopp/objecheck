@@ -62,21 +62,25 @@ class Objecheck::Validator::Collector
   end
 
   def commit(t)
+    errors_in_t = pop_errors_is_transaction(t)
+    parrent_errors = @transaction_stack.empty? ? @errors : @transaction_stack.last[1]
+    parrent_errors.concat(errors_in_t)
+  end
+
+  def rollback(t)
+    pop_errors_is_transaction(t)
+  end
+
+  private
+
+  def pop_errors_is_transaction(t)
     raise Objecheck::Error, 'no transaction created' if @transaction_stack.empty?
 
     current_t, errors_in_t = @transaction_stack.last
     raise Objecheck::Error, "invalid transaction #{t} (current: #{current_t})" if !t.equal?(current_t)
 
     @transaction_stack.pop
-    parrent_errors = @transaction_stack.empty? ? @errors : @transaction_stack.last[1]
-    parrent_errors.concat(errors_in_t)
-  end
-
-  def rollback(t)
-    current_t = @transaction_stack.last[0]
-    raise Objecheck::Error, "invalid transaction #{t} (current: #{current_t})" if !t.equal?(current_t)
-
-    @transaction_stack.pop
+    errors_in_t
   end
 
   # Transaction is created by Collector#transaction and represents unit of transaction
