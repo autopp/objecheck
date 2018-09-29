@@ -99,5 +99,27 @@ describe Objecheck::Validator::Collector do
       collector.rollback(t)
       expect(collector.errors).to be_empty
     end
+
+    context 'when nested transaction is created' do
+      context 'and order of rollback is correct' do
+        it 'discards errors in transaction' do
+          t1 = collector.transaction
+          t2 = collector.transaction
+          collector.add_error('something is wrong')
+          collector.rollback(t2)
+          collector.rollback(t1)
+          expect(collector.errors).to be_empty
+        end
+      end
+
+      context 'and order of rollback is wrong' do
+        it 'raises error' do
+          t1 = collector.transaction
+          _t2 = collector.transaction
+          collector.add_error('something is wrong')
+          expect { collector.rollback(t1) }.to raise_error(Objecheck::Error)
+        end
+      end
+    end
   end
 end

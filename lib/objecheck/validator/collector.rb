@@ -71,6 +71,9 @@ class Objecheck::Validator::Collector
   end
 
   def rollback(t)
+    current_t = @transaction_stack.last[0]
+    raise Objecheck::Error, "invalid transaction #{t} (current: #{current_t})" if !t.equal?(current_t)
+
     @transaction_stack.pop
   end
 
