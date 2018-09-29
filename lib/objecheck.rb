@@ -19,4 +19,5 @@
 module Objecheck
 end
 
+require 'objecheck/error'
 require 'objecheck/validator'
