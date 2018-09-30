@@ -12,6 +12,20 @@ describe Objecheck::Validator::Collector do
     end
   end
 
+  describe '#validate' do
+    subject { collector.validate(target, { type: Objecheck::Validator::TypeRule.new(validator, Integer) }) }
+
+    context 'when target satisfies rules' do
+      let(:target) { 42 }
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when target dose not satisfy rules' do
+      let(:target) { '42' }
+      it { is_expected.to be_falsey }
+    end
+  end
+
   describe '#add_prefix_in' do
     it { expect { |b| collector.add_prefix_in('[0]', &b) }.to yield_control }
   end
