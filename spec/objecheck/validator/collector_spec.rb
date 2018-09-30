@@ -57,6 +57,13 @@ describe Objecheck::Validator::Collector do
     end
   end
 
+  shared_context 'nested trasanction is created', nested_transactions: true do
+    before do
+      @t1 = collector.transaction
+      @t2 = collector.transaction
+    end
+  end
+
   describe '#commit' do
     it 'promotes errors in transaction' do
       t = collector.transaction
@@ -72,26 +79,21 @@ describe Objecheck::Validator::Collector do
       end
     end
 
-    context 'when nested transaction is created' do
+    context 'when nested transaction is created', nested_transactions: true do
       context 'and order of commit is correct' do
         it 'promotes errors in transaction' do
-          t1 = collector.transaction
-          t2 = collector.transaction
           msg = 'something is wrong'
           collector.add_error(msg)
-          collector.commit(t2)
-          collector.commit(t1)
+          collector.commit(@t2)
+          collector.commit(@t1)
           expect(collector.errors).to eq([": : #{msg}"])
         end
       end
 
       context 'and order of commit is wrong' do
         it 'raises error' do
-          t1 = collector.transaction
-          _t2 = collector.transaction
-          msg = 'something is wrong'
-          collector.add_error(msg)
-          expect { collector.commit(t1) }.to raise_error(Objecheck::Error)
+          collector.add_error('something is wrong')
+          expect { collector.commit(@t1) }.to raise_error(Objecheck::Error)
         end
       end
     end
@@ -106,24 +108,20 @@ describe Objecheck::Validator::Collector do
       expect(collector.errors).to be_empty
     end
 
-    context 'when nested transaction is created' do
+    context 'when nested transaction is created', nested_transactions: true do
       context 'and order of rollback is correct' do
         it 'discards errors in transaction' do
-          t1 = collector.transaction
-          t2 = collector.transaction
           collector.add_error('something is wrong')
-          collector.rollback(t2)
-          collector.rollback(t1)
+          collector.rollback(@t2)
+          collector.rollback(@t1)
           expect(collector.errors).to be_empty
         end
       end
 
       context 'and order of rollback is wrong' do
         it 'raises error' do
-          t1 = collector.transaction
-          _t2 = collector.transaction
           collector.add_error('something is wrong')
-          expect { collector.rollback(t1) }.to raise_error(Objecheck::Error)
+          expect { collector.rollback(@t1) }.to raise_error(Objecheck::Error)
         end
       end
     end
