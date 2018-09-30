@@ -44,5 +44,92 @@ describe Objecheck::Validator::Collector do
         expect(collector.errors).to eq(["#{first_prefix}: : #{first}", "#{first_prefix}#{second_prefix}: : #{second}"])
       end
     end
+
+    context 'when transaction is created by #transaction' do
+      before do
+        collector.transaction
+      end
+
+      it 'records given message but not shown by #errors' do
+        collector.add_error('something is wrong')
+        expect(collector.errors).to be_empty
+      end
+    end
+  end
+
+  shared_context 'nested trasanction is created', nested_transactions: true do
+    before do
+      @t1 = collector.transaction
+      @t2 = collector.transaction
+    end
+  end
+
+  describe '#commit' do
+    it 'promotes errors in transaction' do
+      t = collector.transaction
+      msg = 'something is wrong'
+      collector.add_error(msg)
+      collector.commit(t)
+      expect(collector.errors).to eq([": : #{msg}"])
+    end
+
+    context 'when transaction is not created' do
+      it 'raises error' do
+        expect { collector.commit(nil) }.to raise_error(Objecheck::Error)
+      end
+    end
+
+    context 'when nested transaction is created', nested_transactions: true do
+      context 'and order of commit is correct' do
+        it 'promotes errors in transaction' do
+          msg = 'something is wrong'
+          collector.add_error(msg)
+          collector.commit(@t2)
+          collector.commit(@t1)
+          expect(collector.errors).to eq([": : #{msg}"])
+        end
+      end
+
+      context 'and order of commit is wrong' do
+        it 'raises error' do
+          collector.add_error('something is wrong')
+          expect { collector.commit(@t1) }.to raise_error(Objecheck::Error)
+        end
+      end
+    end
+  end
+
+  describe '#rollback' do
+    it 'discards errors in transaction' do
+      t = collector.transaction
+      msg = 'something is wrong'
+      collector.add_error(msg)
+      collector.rollback(t)
+      expect(collector.errors).to be_empty
+    end
+
+    context 'when nested transaction is created', nested_transactions: true do
+      context 'and order of rollback is correct' do
+        it 'discards errors in transaction' do
+          collector.add_error('something is wrong')
+          collector.rollback(@t2)
+          collector.rollback(@t1)
+          expect(collector.errors).to be_empty
+        end
+      end
+
+      context 'and order of rollback is wrong' do
+        it 'raises error' do
+          collector.add_error('something is wrong')
+          expect { collector.rollback(@t1) }.to raise_error(Objecheck::Error)
+        end
+      end
+    end
+
+    context 'when transaction is not created' do
+      it 'raises error' do
+        expect { collector.rollback(nil) }.to raise_error(Objecheck::Error)
+      end
+    end
   end
 end
