@@ -151,6 +151,20 @@ Example schema:
 }
 ```
 
+### `any`
+
+`any` makes disjunction of rules.
+
+Example schema:
+```ruby
+{
+  any: [
+    { type: Integer },
+    { type: String }
+  ]
+}
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/autopp/objecheck.
