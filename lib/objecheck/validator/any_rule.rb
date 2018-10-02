@@ -25,14 +25,17 @@ class Objecheck::Validator::AnyRule
 
   def validate(target, collector)
     t = collector.transaction
+    t.add_error("should satisfy one of the #{@child_rules.size} schemas")
+    t_for_nested_rules = t.transaction
     result = @child_rules.each.with_index(1).any? do |rules, i|
-      t.add_prefix_in("(option #{i})") { t.validate(target, rules) }
+      t_for_nested_rules.add_prefix_in("(option #{i})") { t_for_nested_rules.validate(target, rules) }
     end
 
     if result
+      t.rollback(t_for_nested_rules)
       collector.rollback(t)
     else
-      t.add_error("should satisfy one of the #{@child_rules.size} schemas")
+      t.commit(t_for_nested_rules)
       collector.commit(t)
     end
   end
