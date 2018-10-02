@@ -26,13 +26,13 @@ class Objecheck::Validator::AnyRule
   def validate(target, collector)
     t = collector.transaction
     result = @child_rules.each.with_index(1).any? do |rules, i|
-      collector.add_prefix_in("(option #{i})") { collector.validate(target, rules) }
+      t.add_prefix_in("(option #{i})") { t.validate(target, rules) }
     end
 
     if result
       collector.rollback(t)
     else
-      collector.add_error("should satisfy one of the #{@child_rules.size} schemas")
+      t.add_error("should satisfy one of the #{@child_rules.size} schemas")
       collector.commit(t)
     end
   end

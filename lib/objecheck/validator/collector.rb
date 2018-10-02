@@ -17,13 +17,15 @@
 # Collector is used in Validator#validate to aggregate errors
 #
 class Objecheck::Validator::Collector
-  def initialize(validator)
+  attr_reader :current_rule_name, :prefix_stack, :current_t
+
+  def initialize(validator, parent = nil)
     @validator = validator
-    @current_rule_name = nil
     @current_validation_result = true
-    @prefix_stack = []
+    @current_rule_name = parent ? parent.current_rule_name : nil
+    @prefix_stack = parent ? [parent.prefix_stack.join('')] : []
     @errors = []
-    @transaction_stack = []
+    @current_t = nil
   end
 
   def add_prefix_in(prefix)
@@ -35,12 +37,7 @@ class Objecheck::Validator::Collector
 
   def add_error(msg)
     @current_validation_result = false
-    msg = "#{@prefix_stack.join('')}: #{@current_rule_name}: #{msg}"
-    if (_t, errors = @transaction_stack.last)
-      errors << msg
-    else
-      @errors << msg
-    end
+    @errors << "#{@prefix_stack.join('')}: #{@current_rule_name}: #{msg}"
   end
 
   def validate(target, rules)
@@ -61,30 +58,29 @@ class Objecheck::Validator::Collector
   end
 
   def transaction
-    t = Object.new
-    @transaction_stack << [t, []]
-    t
+    raise Objecheck::Error, 'another transaction is already created' if @current_t
+
+    @current_t = self.class.new(@validator, self)
   end
 
   def commit(t)
-    errors_in_t = pop_errors_is_transaction(t)
-    parrent_errors = @transaction_stack.empty? ? @errors : @transaction_stack.last[1]
-    parrent_errors.concat(errors_in_t)
+    check_transaction(t)
+    @current_t = nil
+    @errors.concat(t.errors)
   end
 
   def rollback(t)
-    pop_errors_is_transaction(t)
+    check_transaction(t)
+    @current_t = nil
   end
 
   private
 
-  def pop_errors_is_transaction(t)
-    raise Objecheck::Error, 'no transaction created' if @transaction_stack.empty?
+  def check_transaction(t)
+    raise Objecheck::Error, 'transaction is not created' if !@current_t
 
-    current_t, errors_in_t = @transaction_stack.last
-    raise Objecheck::Error, "invalid transaction #{t} (current: #{current_t})" if !t.equal?(current_t)
+    raise Objecheck::Error, "invalid transaction #{t} (current: #{@current_t})" if !t.equal?(@current_t)
 
-    @transaction_stack.pop
-    errors_in_t
+    raise Objecheck::Error, "transaction hash uncommited nested transaction (#{t.current_t})" if t.current_t
   end
 end
