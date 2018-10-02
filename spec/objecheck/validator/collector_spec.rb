@@ -58,15 +58,26 @@ describe Objecheck::Validator::Collector do
         expect(collector.errors).to eq(["#{first_prefix}: : #{first}", "#{first_prefix}#{second_prefix}: : #{second}"])
       end
     end
+  end
 
-    context 'when transaction is created by #transaction' do
-      before do
-        collector.transaction
-      end
+  describe '#transaction' do
+    subject { collector.transaction }
 
-      it 'records given message but not shown by #errors' do
-        collector.add_error('something is wrong')
-        expect(collector.errors).to be_empty
+    it 'has interface same as Collector' do
+      expect(subject).to respond_to(:errors).with(0).arguments
+      expect(subject).to respond_to(:add_prefix_in).with(1).argument
+      expect(subject).to respond_to(:add_error).with(1).argument
+      expect(subject).to respond_to(:validate).with(2).arguments
+      expect(subject).to respond_to(:transaction).with(0).arguments
+      expect(subject).to respond_to(:commit).with(1).argument
+      expect(subject).to respond_to(:rollback).with(1).argument
+    end
+
+    context 'when another transaction is already created' do
+      before { collector.transaction }
+
+      it 'raises error' do
+        expect { subject }.to raise_error(Objecheck::Error)
       end
     end
   end
@@ -74,7 +85,7 @@ describe Objecheck::Validator::Collector do
   shared_context 'nested trasanction is created', nested_transactions: true do
     before do
       @t1 = collector.transaction
-      @t2 = collector.transaction
+      @t2 = @t1.transaction
     end
   end
 
@@ -82,7 +93,7 @@ describe Objecheck::Validator::Collector do
     it 'promotes errors in transaction' do
       t = collector.transaction
       msg = 'something is wrong'
-      collector.add_error(msg)
+      t.add_error(msg)
       collector.commit(t)
       expect(collector.errors).to eq([": : #{msg}"])
     end
@@ -97,8 +108,8 @@ describe Objecheck::Validator::Collector do
       context 'and order of commit is correct' do
         it 'promotes errors in transaction' do
           msg = 'something is wrong'
-          collector.add_error(msg)
-          collector.commit(@t2)
+          @t2.add_error(msg)
+          @t1.commit(@t2)
           collector.commit(@t1)
           expect(collector.errors).to eq([": : #{msg}"])
         end
@@ -117,7 +128,7 @@ describe Objecheck::Validator::Collector do
     it 'discards errors in transaction' do
       t = collector.transaction
       msg = 'something is wrong'
-      collector.add_error(msg)
+      t.add_error(msg)
       collector.rollback(t)
       expect(collector.errors).to be_empty
     end
@@ -125,8 +136,8 @@ describe Objecheck::Validator::Collector do
     context 'when nested transaction is created', nested_transactions: true do
       context 'and order of rollback is correct' do
         it 'discards errors in transaction' do
-          collector.add_error('something is wrong')
-          collector.rollback(@t2)
+          @t2.add_error('something is wrong')
+          @t1.rollback(@t2)
           collector.rollback(@t1)
           expect(collector.errors).to be_empty
         end
