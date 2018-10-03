@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'objecheck'
-  spec.version       = '0.3.0'
+  spec.version       = '0.4.0'
   spec.authors       = ['autopp']
   spec.email         = ['autopp.inc@gmail.com']
 

@@ -1,5 +1,10 @@
 # Change Log
 
+## v0.4.0
+
+- Add `AnyRule` as `any`
+- Add transaction API to collector for commit/rollback errors
+
 ## v0.3.0
 
 - Add `EqRule` as `eq`
