@@ -33,9 +33,9 @@ class Objecheck::Validator
     any: AnyRule
   }.freeze
 
-  def initialize(schema, rule_map = DEFAULT_RULES)
+  def initialize(schema, rule_map = DEFAULT_RULES, schema_validation = true)
     @rule_map = rule_map
-    @rules = compile_schema(schema)
+    @rules = compile_schema(schema, schema_validation)
   end
 
   def validate(target)
@@ -46,9 +46,15 @@ class Objecheck::Validator
     collector.errors
   end
 
-  def compile_schema(schema)
+  def compile_schema(schema, schema_validation = true)
     schema.each_with_object({}) do |(rule_name, param), rules|
-      rules[rule_name] = @rule_map[rule_name].new(self, param)
+      rule_class = @rule_map[rule_name]
+      if schema_validation && rule_class.respond_to?(:schema)
+        param_schema, param_rule_map = rule_class.schema
+        param_validator = Objecheck::Validator.new(param_schema, param_rule_map || DEFAULT_RULES, false)
+        raise Objecheck::Error, 'parameter error' if !param_validator.validate(param).empty?
+      end
+      rules[rule_name] = rule_class.new(self, param)
     end
   end
 end
