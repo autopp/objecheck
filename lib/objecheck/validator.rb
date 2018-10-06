@@ -52,7 +52,9 @@ class Objecheck::Validator
       if schema_validation && rule_class.respond_to?(:schema)
         param_schema, param_rule_map = rule_class.schema
         param_validator = Objecheck::Validator.new(param_schema, param_rule_map || DEFAULT_RULES, false)
-        raise Objecheck::Error, 'parameter error' if !param_validator.validate(param).empty?
+        if !(errors = param_validator.validate(param)).empty?
+          raise Objecheck::Error, "paramters for #{rule_name} rule is invalid\n  #{errors.join("\n  ")}"
+        end
       end
       rules[rule_name] = rule_class.new(self, param)
     end
