@@ -35,6 +35,7 @@ class Objecheck::Validator
 
   def initialize(schema, rule_map = DEFAULT_RULES, schema_validation = true)
     @rule_map = rule_map
+    @param_validators = {} if schema_validation
     @rules = compile_schema(schema, schema_validation)
   end
 
@@ -50,8 +51,12 @@ class Objecheck::Validator
     schema.each_with_object({}) do |(rule_name, param), rules|
       rule_class = @rule_map[rule_name]
       if schema_validation && rule_class.respond_to?(:schema)
-        param_schema, param_rule_map = rule_class.schema
-        param_validator = Objecheck::Validator.new(param_schema, param_rule_map || DEFAULT_RULES, false)
+        param_validator = @param_validators[:rule_name]
+        if !param_validator
+          param_schema, param_rule_map = rule_class.schema
+          param_validator = Objecheck::Validator.new(param_schema, param_rule_map || DEFAULT_RULES, false)
+          @param_validators[:rule_name] = param_validator
+        end
         if !(errors = param_validator.validate(param)).empty?
           raise Objecheck::Error, "paramters for #{rule_name} rule is invalid\n  #{errors.join("\n  ")}"
         end
