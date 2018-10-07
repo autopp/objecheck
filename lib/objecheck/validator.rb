@@ -30,6 +30,7 @@ class Objecheck::Validator
     each_key: EachKeyRule,
     each_value: EachValueRule,
     key_value: KeyValueRule,
+    eq: EqRule,
     any: AnyRule
   }.freeze
 
