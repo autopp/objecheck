@@ -53,7 +53,7 @@ class Objecheck::Validator
     schema.each_with_object({}) do |(rule_name, param), rules|
       rule_class = @rule_map[rule_name]
       if @schema_validation && rule_class.respond_to?(:schema)
-        param_validator = @param_validators[:rule_name]
+        param_validator = @param_validators[rule_name]
         if !param_validator
           param_schema, param_rule_map = rule_class.schema
           param_validator = Objecheck::Validator.new(param_schema, param_rule_map || DEFAULT_RULES, false)
