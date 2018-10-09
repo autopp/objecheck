@@ -33,4 +33,8 @@ class Objecheck::Validator::EachValueRule
       end
     end
   end
+
+  def self.schema
+    [{ type: Hash }]
+  end
 end
