@@ -28,4 +28,8 @@ class Objecheck::Validator::TypeRule
       collector.add_error("should be a #{@type} (got #{target.class})")
     end
   end
+
+  def self.schema
+    [{ any: [{ type: Module }, { eq: :bool }] }]
+  end
 end
