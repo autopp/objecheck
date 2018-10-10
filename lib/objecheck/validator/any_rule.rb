@@ -39,4 +39,8 @@ class Objecheck::Validator::AnyRule
       collector.commit(t)
     end
   end
+
+  def self.schema
+    [{ each: { type: Hash } }]
+  end
 end
