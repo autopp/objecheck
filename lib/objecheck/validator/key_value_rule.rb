@@ -42,4 +42,19 @@ class Objecheck::Validator::KeyValueRule
       end
     end
   end
+
+  def self.schema
+    [
+      {
+        type: Hash,
+        each_value: {
+          type: Hash,
+          key_value: {
+            required: { required: false, value: { type: :bool } },
+            value: { value: { type: Hash } }
+          }
+        }
+      }
+    ]
+  end
 end
