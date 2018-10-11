@@ -1,5 +1,16 @@
 # Change Log
 
+## v0.5.0
+
+### New features
+
+- Add validation mechanism for parameters of rule
+- Validate parameters of each builtin rule in `Validator#initialize`
+
+### Bug fixes
+
+- Add `eq` to builtin rules map
+
 ## v0.4.0
 
 - Add `AnyRule` as `any`
