@@ -165,6 +165,17 @@ Example schema:
 }
 ```
 
+### `satisfy`
+
+`satisfy` checks by Proc
+
+Example schema:
+```ruby
+{
+  satisfy: ->(x) { x.even? }
+}
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/autopp/objecheck.
