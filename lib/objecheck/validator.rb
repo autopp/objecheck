@@ -25,6 +25,7 @@ class Objecheck::Validator
   require 'objecheck/validator/eq_rule'
   require 'objecheck/validator/any_rule'
   require 'objecheck/validator/satisfy_rule'
+  require 'objecheck/validator/respond_to_rule'
   DEFAULT_RULES = {
     type: TypeRule,
     each: EachRule,
@@ -33,7 +34,8 @@ class Objecheck::Validator
     key_value: KeyValueRule,
     eq: EqRule,
     any: AnyRule,
-    satisfy: SatisfyRule
+    satisfy: SatisfyRule,
+    respond_to: RespondToRule
   }.freeze
 
   def initialize(schema, rule_map = DEFAULT_RULES, schema_validation = true)
