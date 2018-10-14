@@ -176,6 +176,17 @@ Example schema:
 }
 ```
 
+### `respond_to`
+
+`respond_to` checks defined methods
+
+Example schema:
+```ruby
+{
+  respond_to: [:configure :run]
+}
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/autopp/objecheck.
