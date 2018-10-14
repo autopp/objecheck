@@ -25,4 +25,8 @@ class Objecheck::Validator::RespondToRule
     not_responds = @methods.reject { |m| target.respond_to?(m) }
     collector.add_error("should be respond to #{not_responds.join(', ')}") if !not_responds.empty?
   end
+
+  def self.schema
+    [{ each: { type: Symbol } }]
+  end
 end
