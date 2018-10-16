@@ -24,4 +24,8 @@ class Objecheck::Validator::SatisfyRule
   def validate(target, collector)
     collector.add_error("should satisfy #{@pred.inspect}") if !@pred.call(target)
   end
+
+  def self.schema
+    [{ respond_to: %i[call] }]
+  end
 end
