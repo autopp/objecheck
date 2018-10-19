@@ -1,5 +1,10 @@
 # Change Log
 
+## v0.6.0
+
+- Add `SatisfyRule` as `satisfy`
+- Add `RespondToRule` as `respond_to`
+
 ## v0.5.0
 
 ### New features
