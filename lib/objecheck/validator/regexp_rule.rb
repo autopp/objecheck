@@ -26,4 +26,8 @@ class Objecheck::Validator::RegexpRule
   rescue TypeError
     collector.add_error("should be acceptable to Regexp (type is #{target.class})")
   end
+
+  def self.schema
+    [{ type: Regexp }]
+  end
 end
