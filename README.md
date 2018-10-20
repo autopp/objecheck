@@ -187,6 +187,17 @@ Example schema:
 }
 ```
 
+### `regexp`
+
+`regexp` checks pattern by regular expression.
+
+Example schema:
+```ruby
+{
+  regexp: /\A[a-zA-Z_]\w*\z/
+}
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/autopp/objecheck.
