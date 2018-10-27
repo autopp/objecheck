@@ -53,6 +53,8 @@ class Objecheck::Validator
       collector.validate(target, @rules)
     end
     collector.errors
+  rescue StandardError
+    raise Objecheck::Error, 'internal error (it may be bug of library or rule)'
   end
 
   def compile_schema(schema)
