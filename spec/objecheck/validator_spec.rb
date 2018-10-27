@@ -31,6 +31,29 @@ describe Objecheck::Validator do
         it { is_expected.to eq(['root: answer: should have answer which is 42']) }
       end
     end
+
+    context 'when rule raises exception' do
+      let(:answer_class) do
+        Class.new do
+          def initialize(_validator, _param)
+          end
+
+          def validate(_target, _collector)
+            raise 'some error'
+          end
+        end
+      end
+
+      let(:original_msg) { 'some error' }
+
+      let(:target) { nil }
+
+      it 'raises error with the original' do
+        expect { subject }.to raise_error(Objecheck::Error) do |e|
+          expect(e.cause.message).to eq('some error')
+        end
+      end
+    end
   end
 
   describe '#compile_schema' do
